@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Frase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class FraseController extends Controller
 {
@@ -40,7 +41,12 @@ class FraseController extends Controller
      */
     public function store(Request $request)
     {
-       $frase = new Frase($request->all());
+        $validatedData = $request->validate([
+            'title' => ['required', 'unique:frases', 'max:255'],
+            'body' => ['required'],
+          ]);
+
+       $frase = new Frase($validatedData);
 
         $frase->user_id = Auth::id();
 
@@ -86,7 +92,13 @@ class FraseController extends Controller
      */
     public function update(Request $request, Frase $frase)
     {
+         $validatedData = $request->validate([
+            'title' => ['required', Rule::unique('frases')->ignore($frase), 'max:255'],
+            'body' => ['required'],
+          ]);
+
          if($frase->user_id === Auth::id()){
+            $frase->update($request->all());   
         return redirect()->route('frases.index')->with('sucess', 'Frase editada com sucesso');
         }else{
             return redirect()->route('frases.index')

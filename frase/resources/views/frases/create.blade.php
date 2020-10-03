@@ -10,6 +10,18 @@
 	</div>
 </div>
 
+@if ($errors->any())
+  <div class="alert alert-danger">
+    <strong>Ops!</strong>Existe um problema com os dados inseridos <br><br>
+    <ul>
+      @foreach($errors->all() as $error)
+      <li>
+        {{ $error }}
+       </li>
+       @endforeach
+    </ul>
+  </div>
+@endif
 
 <form action="{{ route('frases.store') }}" method="POST">
 	@csrf
@@ -18,7 +30,7 @@
 		<div class="col">
 			<div class="form-group">
 				<strong>Title:</strong>
-				<input type="text" name="title" class="form-control">
+				<input type="text" name="title" class="form-control" value="{{ old('title') }}" required="" maxlength="255">
 			</div>
 		</div>
 	</div>
@@ -27,7 +39,7 @@
 		<div class="col">
 			<div class="form-group">
 				<strong>Body:</strong>
-				<textarea class="form-control" name="body"> </textarea>
+				<textarea class="form-control" name="body"required="">{{ old('body')}}</textarea>
 			</div>
 		</div>
 	</div>

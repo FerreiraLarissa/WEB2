@@ -18,7 +18,7 @@
 		<div class="col">
 			<div class="form-group">
 				<strong>Title:</strong>
-				<input type="text" name="title" class="form-control" value= "{{ $frase->title }}">
+				<input type="text" name="title" class="form-control" value= "{{ $frase->title }}" required="" maxlength="255">
 			</div>
 		</div>
 	</div>

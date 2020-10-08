@@ -9,6 +9,18 @@
 	</div>
 </div>
 
+@isset($frase->image)
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+		<div class="from-group">
+			<strong>Image:</strong>
+			<img src="{{ asset('storage/'.$frase->image->path) }}">
+		</div>
+	</div>
+</div>
+
+@endisset
+
 <div class="row">
 	<div class="col">
 		<div class="from-group">

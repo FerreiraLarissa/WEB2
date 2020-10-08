@@ -8,6 +8,11 @@
          <div class="card-header">
              <h1>{{$frase->title}}</h1>
          </div>
+
+        @isset($frase->image)
+        <img class="card-img-top" src="{{ asset('/storage/'.$frase->image->path) }}">
+        @endisset
+        
          <div class="card-body">
              <h5 class="card-title">Author: {{$frase->user->name}}</h5>
 

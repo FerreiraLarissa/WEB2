@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Frase;
+use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage; 
 
 class FraseController extends Controller
 {
@@ -44,15 +46,28 @@ class FraseController extends Controller
         $validatedData = $request->validate([
             'title' => ['required', 'unique:frases', 'max:255'],
             'body' => ['required'],
+            'image' => ['mimes:jpeg,png' , 'dimensions:min_width=200,min_height=200']
           ]);
 
        $frase = new Frase($validatedData);
 
         $frase->user_id = Auth::id();
-
         $frase->save();
 
-        return redirect('frases')->with('sucess', "Frase criada com sucesso!");
+       if($request->hasFile('image') and $request->file('image')->isValid()) {
+            $extension = $request->image->extension();
+           
+            $image_name = now()->toDateTimeString()."_".substr(base64_encode(sha1(mt_rand())), 0, 10);
+
+            $path = $request->image->storeAs('frases',$image_name.".".$extension, 'public');
+
+            $image = new Image();
+            $image->frase_id = $frase->id;
+            $image->path = $path;
+            $image->save();
+        }
+
+        return redirect('frases')->with('sucess', 'Frase criada com sucesso!');
     }
 
     /**
@@ -95,10 +110,25 @@ class FraseController extends Controller
          $validatedData = $request->validate([
             'title' => ['required', Rule::unique('frases')->ignore($frase), 'max:255'],
             'body' => ['required'],
+            'image' => ['mimes:jpge,png' , 'dimensions:min_width=200,min_height=200'],
           ]);
 
          if($frase->user_id === Auth::id()){
             $frase->update($request->all());   
+
+            if($request->hasFile('image') and $request->file('image')->isValid()) {
+                $frase->image->delete();
+                $extension = $request->image->extension();
+                $image_name = now()->toDateTimeString()."_".substr(base64_encode(sha1(mt_rand())), 0, 10);
+
+                $path = $request->image->storeAs('frases', $image_name.".".$extension, 'public');
+
+                $image = new Image();
+                $image->path = $path;
+                $image->post_id = $frase->id;
+                $image->save();
+            }
+
         return redirect()->route('frases.index')->with('sucess', 'Frase editada com sucesso');
         }else{
             return redirect()->route('frases.index')
@@ -116,7 +146,12 @@ class FraseController extends Controller
     public function destroy(Frase $frase)
     {
          if ($frase->user_id === Auth::id()) {
+           // $path = $frase->image->path;
+
             $frase->delete();
+
+            Storage::disk('public')->delete($path);
+
             return redirect()->route('frases.index')
                              ->with('sucess', 'Frase apagada com sucesso');
         }else{

@@ -44,6 +44,20 @@
                                     </div>
                         </li>
 
+                        <li class="nav-item dropdown">
+                            <a id="ManageDropdown" class="nav-link dropdown-toggle" href="#" role="botton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                Gêneros <span class="caret"></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ManageDropdown">
+                                <a class="nav-link" href="{{ route('generos.index') }}">
+                                    {{ __('Página Inicial de Gênero')}}
+                                </a>
+                                <a class="nav-link" href="{{ route('generos.create' )}}">
+                                    {{ __('Criar novo gênero') }}
+                                </a>
+                            </div>
+                        </li>
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->

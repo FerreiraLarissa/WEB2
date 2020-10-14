@@ -55,6 +55,23 @@
 		</div>
 	</div>
 
+	<div class="row">
+		<div class="col">
+			<div class="form-group">
+				<strong>Gêneros:</strong>
+				<select class="custom-select" name="generos_id[]" multiple>
+					@foreach ($generos as $genero)
+						@if($frase->generos->contains($genero))
+							<option value="{{ $genero->id }}">{{ $genero->name }}</option>
+						@else
+							<option value="{{ $genero->id }}">{{ $genero->name }}</option>
+						@endif
+					@endforeach
+				</select>
+			</div>
+		</div>
+	</div>
+
 	<div class="col text-center">
 		<button type="submit" class="btn btn-primary col">Update</button>
 	</div>

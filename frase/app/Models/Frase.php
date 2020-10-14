@@ -13,7 +13,7 @@ class Frase extends Model
     
 	  protected $fillable = [
 		    	'title' ,'body',
-		    ];
+	  ];
 
     protected static function booted()
     {
@@ -35,5 +35,10 @@ class Frase extends Model
         {
         	return $this->hasOne('App\Models\Image');
 
+         }
+
+         public function generos()
+         {
+            return $this->belongsToMany('App\Models\Genero')->withTimestamps();
          }
 }

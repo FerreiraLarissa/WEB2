@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FraseController;
+use App\Http\Controllers\GeneroController;
 use App\Http\Controllers\HomeController;
 
 /*
@@ -23,4 +24,4 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::resource('/frases',FraseController::class)->middleware('auth');
 
-
+Route::resource('/generos',GeneroController::class)->middleware('auth');
